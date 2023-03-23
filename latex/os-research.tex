@@ -1,0 +1,518 @@
+\documentclass{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage[sorting = none]{biblatex}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{hyperref}           % page numbers and '\ref's become clickable
+\usepackage{todonotes}
+\usepackage{float}          % for forcing images to stay where they should
+\usepackage{multirow}       % for using multirow in tables
+\usepackage{tikz}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+\usepackage{longtable}
+\usepackage[edges]{forest}
+\usepackage[framemethod=TikZ]{mdframed}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{MnSymbol}
+\usepackage{tipa}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+
+\mdfdefinestyle{Frame}{
+    linecolor=black,
+    outerlinewidth=0.3pt,
+    roundcorner=2pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    leftmargin =1cm,
+    rightmargin =1cm,
+    backgroundcolor=white}
+    \mdfdefinestyle{Frame_NoMargin}{%
+    linecolor=black,
+    outerlinewidth=0.3pt,
+    roundcorner=2pt,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    backgroundcolor=white}
+    \mdfdefinestyle{InnerFrame_NoMargin}{%
+    linecolor=black,
+    outerlinewidth=0.1pt,
+    roundcorner=0.5pt,
+    % innertopmargin=\baselineskip,
+    % innerbottommargin=\baselineskip,
+    leftmargin =-0.1cm,
+    innerleftmargin = 0.05cm,
+    rightmargin =0cm,
+    backgroundcolor=white}  
+    \mdfdefinestyle{InnerFrameBig_NoMargin}{%
+    linecolor=black,
+    outerlinewidth=0.1pt,
+    roundcorner=0.5pt,
+    % innertopmargin=\baselineskip,
+    % innerbottommargin=\baselineskip,
+    leftmargin =-0.22cm,
+    innerleftmargin = 0.05cm,
+    rightmargin =-0.22cm,
+    backgroundcolor=white}
+      \mdfdefinestyle{Frame_NoInnerMargin}{%
+    linecolor=black,
+    outerlinewidth=0.3pt,
+    roundcorner=2pt,
+    innerleftmargin = 0.02cm,
+    innertopmargin=\baselineskip,
+    innerbottommargin=\baselineskip,
+    backgroundcolor=white}
+      \mdfdefinestyle{Frame_Blank}{%
+    linecolor=white,
+    outerlinewidth=0.0pt,
+    roundcorner=0pt,
+    innerleftmargin = 0.3cm,
+        innertopmargin=0cm,
+    innerbottommargin=0.2cm,
+    backgroundcolor=white}    
+
+%%%%%%%%%%%%%%%%%%%%%%%
+% Some commands       %
+%%%%%%%%%%%%%%%%%%%%%%%
+% Notes
+\newcommand{\note}[1]{\todo[inline]{#1}}
+\newcommand{\urgent}[1]{\todo[inline, color=red]{#1}}
+\newcommand{\revision}[1]{\todo[inline, color=green]{#1}}
+\newcommand{\fix}[1]{\todo[inline, color=yellow]{#1}}
+% Tables
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcommand{\adaptcell}[1]{\parbox{0.95\columnwidth}{\vspace{0.5em}#1\vspace{0.5em}}}
+% Math
+\newcommand{\rarrow}{$\rightarrow\ $}
+\newcommand{\larrow}{$\leftarrow\ $}
+\newcommand{\lif}{\rightarrow}
+\newcommand{\liff}{\leftrightarrow}
+\newcommand{\la}{\forall}
+\renewcommand{\le}{\exists}
+\newcommand{\lxor}{\dot\vee}
+\renewcommand{\ll}{\llbracket}
+\renewcommand{\phi}{\varphi}
+\newcommand{\rr}{\rrbracket}
+\newcommand{\lk}{\square}
+\newcommand{\lp}{\lozenge}
+\newcommand{\argmin}[1]{\underset{#1}{\mathrm{argmin}}}
+\newcommand{\argmax}[1]{\underset{#1}{\mathrm{argmax}}}
+\newcommand{\Sum}[1]{\underset{#1}{\sum}}
+
+% Others
+\newcommand{\newcolumn}{\vfill\pagebreak}
+\renewcommand{\b}[1]{\textbf{#1}}
+\renewcommand{\it}[1]{\textit{#1}}
+\renewcommand{\u}[1]{\underline{#1}}
+
+%%%%%%%%%%% STUFF TO PRINT SEMANTIC TABLEAUX %%%%%%%%%%
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows,calc, trees, automata}
+
+\tikzset{
+	modal/.style={>=stealth',shorten >=1pt,shorten <=1pt,auto,node distance=1.5cm,semithick},world/.style={circle,draw,minimum size=0.5cm,fill=gray!15},point/.style={circle,draw,inner sep=0.5mm,fill=black},reflexive above/.style={->,loop,looseness=7,in=120,out=60},reflexive below/.style={->,loop,looseness=7,in=240,out=300},reflexive left/.style={->,loop,looseness=7,in=150,out=210},reflexive right/.style={->,loop,looseness=7,in=30,out=330},none/.style={}
+}
+
+\forestset{%
+	declare toks={T}{},
+	declare toks={F}{},
+	my label/.style={%
+		tikz+={%
+			\path[late options={%
+				name=\forestoption{name},label={#1}}
+			];
+		}
+	},
+	tableaux/.style={%
+		forked edges,
+		for tree={
+			math content,
+			parent anchor=children,
+			child anchor=parent,
+		},
+		where level=0{%
+			for children={no edge},
+			phantom,
+		}{%
+			before typesetting nodes={%
+				content/.wrap value={\circ},
+			},
+			delay={%
+				my label/.wrap pgfmath arg={{[inner sep=0pt, xshift=-3.5pt, yshift=3.5pt, anchor=north west, font=\scriptsize]-45:$##1$}}{content()},
+				insert before/.wrap pgfmath arg={%
+					[{##1}, no edge, math content, before drawing tree={x'+=7.5pt}]
+				}{T()},
+				insert after/.wrap pgfmath arg={%
+					[{##1}, no edge, math content, before drawing tree={x'-=7.5pt}]
+				}{F()},
+			},
+			if={n_children("!u")==1}{%
+				before packing={calign with current edge},
+			}{}
+		},
+	}
+}
+
+\forestset{
+  smullyan tableaux/.style={
+    for tree={
+      math content
+    },
+    where n children=1{
+      !1.before computing xy={l=\baselineskip},
+      !1.no edge
+    }{},
+    closed/.style={
+      label=below:$\times$
+    },
+  },
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\addbibresource{ref.bib}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\title{ \Huge \textbf{ Digital Democracy For Iran } \\[0.5cm]}
+
+\author{
+
+\textit{Catliberta} \\
+}
+\date{January 2023}
+
+\addbibresource{ref.bib}
+
+
+\begin{document}
+
+\maketitle
+
+
+
+%\tableofcontents
+% \note{TODO: social impact}
+
+\section{Abstract}
+
+This research seeks to explore innovative solutions, platforms, and tools for enhancing the democratic process in Iran. By examining the current state of digital democracy and considering potential future developments, this study aims to provide actionable insights for both immediate implementation and long-term planning. In doing so, the research addresses the unique cultural, social, and political context of Iran while drawing upon global best practices and emerging trends in digital democracy. Ultimately, this research strives to contribute to the promotion of a more inclusive, participatory, and responsive democratic environment in Iran.
+This research is open source, transparent and accessible through the Github repository \url{https://github.com/oalee/os-digital-democracy-iran}. 
+
+\section{Problem Statement}
+
+In this study, we will focus on the two main sub-problems identified in the Problem Statement section, namely the uncertainty about the future and the lack of knowledge and education among the people of Iran. The aim of this study is to provide insights into these challenges and propose potential solutions that could empower Iranians to create a more democratic society and secure a better future. Through an in-depth analysis of these issues, we hope to contribute to the Women.Life.Freedom movement's efforts and assist in overcoming these obstacles in their quest for a brighter future for Iran.
+
+
+
+\subsection{Uncertainty About The Future}
+The uncertainty about the future is a significant challenge faced by the Women.Life.Freedom movement in Iran. 
+People's fear of what will happen can make it challenging to mobilize and motivate them to continue their struggle.
+The prospect of another totalitarian regime in Iran, similar to what happened in other failed revolutions, adds to this fear.
+
+
+To overcome this challenge, a well-researched and scientifically sound plan for the future can help mitigate the uncertainties faced by the Iranian people. Such a plan should be grounded in empirical evidence and scientific research, addressing the challenges facing the country and offering practical solutions for a more democratic and equitable society. By offering a clear and actionable roadmap for the future, the movement can inspire Iranians to work together towards a shared vision and overcome their fears of uncertainty.
+
+% \subsubsection{Lack of knowledge and education}
+\subsection{Lack of Knowledge and Education}
+
+Access to knowledge and education is crucial for the Women.Life.Freedom movement in Iran to establish a democratic society and create a better future. However, the current regime controls education in Iran, limiting access to information and knowledge, spreading their propaganda and affecting the mind of young, and hindering the ability of Iranians to defend themselves against oppressive forces.
+
+To address this challenge, the Women.Life.Freedom movement could prioritize the development of an alternative open science online platform for education of all Iranians, starting with schoolgirls who are often most in need of access to education. The movement could also advocate for policies that prioritize secular online education alternative and provide resources to people of Iran to ensure a well-rounded education.
+By empowering Iranians with the knowledge and skills to defend themselves and advocating for a more democratic society, the Women.Life.Freedom movement can pave the way for a brighter future.
+
+% Knowledge and education are the most important factors in a democracy and creation of a better future.
+
+% However, many people in Iran lack access to the resources necessary to defend themselves against oppressive forces.
+
+% Nika Shahkarami died because of lack of knowledge and education. If she was educated that 
+% the regime tracks people's location through their phones, she might have been alive today.
+% People still do not have any resources to learn how to defend against physical and mental abuse and mind games of the regime. 
+
+
+% \subsubsection{Lack of an opposition/coalition}
+% Another stagnating factor is the lack of an opposition/coalition. An opposition/coalition is a group of people who are united in their efforts to create a better future for Iran.
+
+% In this work, we try to answer to three main research questions:
+
+% \begin{enumerate}
+%     \item How could we minimze the uncertainties about the future?
+%     \item Could we create a leaderless opposition?
+%     \item How could we facilitate giving birth to a coalition?
+
+
+\section{Introduction}
+
+The rapid advancement of technology, particularly in digital communication, has substantially impacted political and social interactions in recent years. This research investigates the feasibility of establishing a representative system and an open science assembly among the Iranian diaspora, focusing on the development of scientifically robust plans for environmental restoration, education, and other critical areas. The study's novelty lies in its comprehensive approach, combining theoretical insights, empirical evidence, and data-driven methodologies to evaluate the potential of such a system for addressing the challenges faced by Iran.
+
+Digital democracy offers a unique opportunity to revolutionize decision-making processes by enabling citizens to participate directly in shaping public policies and addressing pressing societal issues, such as environmental conservation and education reform \cite{coleman2009internet}. By harnessing digital platforms and tools, citizens can engage in informed deliberation, collaborate on policy proposals, and hold public officials accountable.
+
+This research aims to assess the feasibility of creating a representative system among the Iranian diaspora, emphasizing scientific research and the development of strategic plans. The primary goal is to determine how such a system could foster collaboration and effectively address Iran's challenges through data-driven methodologies and the analysis of public opinion.
+
+% This work is structured as follows: First, we provide an overview of the key concepts, including digital democracy, environmental restoration, and education reform. Next, we examine the current state of these areas in Iran, identifying challenges and opportunities. We then explore the feasibility of establishing a representative system and an open science assembly among the Iranian diaspora, aimed at promoting scientific research and collaboration. Subsequently, we evaluate the potential of integrating digital democracy methodologies into the proposed plans and the development of a roadmap for Iran's future. Finally, we outline the necessary steps to harness digital democracy for sustainable development and progress.
+
+By assessing the feasibility of a representative system and an open science assembly, this research aims to enhance understanding of how technology and data-driven methodologies can empower citizens and promote more inclusive, transparent, and effective governance in Iran. The findings may also serve as valuable insights for policymakers, practitioners, and researchers in other countries seeking to leverage digital democracy for environmental restoration, education reform, and other vital areas of societal development.
+
+\section{Background Information}
+
+\subsection{Open Source}
+Open source is a development methodology that emphasizes collaboration, transparency, and community involvement \cite{dibona1999opensource}. This approach involves sharing software code, enabling individuals to view, modify, and distribute it, in contrast to proprietary or closed-source software, where the code remains inaccessible for such purposes \cite{dibona1999opensource}. Open source has been a driving force behind numerous technological advancements, including the development of the internet, which is largely built on open-source software such as Linux \cite{dibona1999opensource}.
+
+\subsection{Open Science}
+Open science is the movement to make scientific research and its dissemination accessible to all levels of society, whether amateur or professional. It promotes transparency and accessibility of knowledge, fostering its development and sharing through collaborative networks. Open science encompasses various aspects, including open access to publications, open data, open-source software, and open educational resources \cite{nielsen2011reinventing}.
+
+\subsection{Open Science Schools of Thought}
+There are five main schools of thought within open science, each emphasizing different aspects and motivations:
+
+\begin{enumerate}
+\item Democracy: This perspective asserts that scientific knowledge should be accessible to everyone, regardless of their social, economic, or professional background, as a matter of democratic principle \cite{fecher2014openscience}.
+
+\item Infrastructure: This view emphasizes the importance of providing open-source infrastructure and tools to facilitate collaboration and knowledge sharing among researchers and the wider public \cite{fecher2014openscience}.
+
+\item Pragmatic: The pragmatic school of thought focuses on the practical benefits of open science, such as increased efficiency, reproducibility, and accelerated scientific progress \cite{fecher2014openscience}.
+
+\item Public: This perspective is concerned with the accessibility of knowledge creation, aiming to increase public engagement with science and promote science literacy across society \cite{fecher2014openscience}.
+
+\item Measurement: This school of thought is focused on alternative impact measurement, considering new metrics to evaluate the success and impact of scientific research beyond traditional citation-based indicators \cite{fecher2014openscience}.
+
+\end{enumerate}
+
+\subsection{Open Science and Education}
+Open science also extends to education, promoting open access to educational materials, resources, and courses, enabling more people to engage with scientific knowledge and research \cite{wiley2014open}. This approach encourages lifelong learning, scientific literacy, and public engagement with science, empowering individuals and communities to make informed decisions and contribute to the scientific process \cite{fecher2014openscience}.
+
+\subsection{Transparency}
+
+Transparency is a critical aspect of democratic societies, as it ensures equitable access to information and prevents power monopolization through secrecy \cite{florini2000democratizing}. Modern technology advancements have enabled increased transparency in governmental affairs, leading to improved trust, accountability, and efficiency in public administration \cite{grimmelikhuijsen2012transparency}.
+
+Governments can leverage contemporary technologies, such as live streaming and automatic transcription using AI, to enhance information access, citizen engagement, and decision-making accountability \cite{meijer2009understanding}. As technology evolves, it provides new opportunities for implementing transparency measures that further promote open governance and foster democratic values.
+% Transparency is a fundamental principle in a democratic society, as it allows for the equitable distribution of information and prevents the monopolization of power through secrecy \cite{florini2000democratizing}. In the modern era, advancements in technology have facilitated increased transparency in various aspects of governmental affairs \cite{bannister2011open}. Open governance initiatives offer numerous benefits, including fostering trust between citizens and their governments, promoting accountability, and enhancing efficiency in public administration \cite{grimmelikhuijsen2012transparency}.
+
+% Transparency can be implemented at various levels and is continually evolving alongside technological developments. For instance, contemporary technologies enable live streaming and automatic transcription of governmental meetings using artificial intelligence (AI) \cite{gronlund2014design}. By leveraging these innovations, governments can improve access to information, enhance citizen engagement, and promote accountability in decision-making processes \cite{meijer2009understanding}.
+
+\subsection{Deliberative Democracy}
+
+Deliberative democracy is a political theory that emphasizes the importance of well-informed and thoughtful discussions among citizens for making democratic decisions \cite{gutmann2004why, habermas1996between}. Instead of simply counting individual preferences, this approach encourages people to actively participate in policy debates and evaluate the merits of various arguments \cite{habermas1996between}. This type of democracy is considered more inclusive and focused on achieving decisions that serve the common good \cite{cohen1997deliberation}.
+
+In a deliberative democracy, citizens engage in rational and respectful conversations, taking into account different viewpoints and assessing the strengths and weaknesses of each perspective \cite{mansbridge2012systemic}. The goal is to reach an agreement or, at a minimum, to better understand the issues being discussed. These conversations can take place in different settings, such as public forums, town hall meetings, or online platforms \cite{neblo2010who}.
+
+The concept of deliberative democracy provides a valuable foundation for understanding how to promote effective political decision-making processes. To achieve this, it is essential to focus on the quality of the discussions, the diversity of participants, and their ability to make well-informed decisions \cite{dryzek2000deliberative}.
+% \subsection{Deliberative Democracy}
+% Deliberative democracy means that political decisions 
+% should be the product of fair and reasonable discussion and debate among citizens. In deliberative democracy, citizens exchange arguments and consider different claims that are designed to secure the public good. 
+
+% Deliberative democracy is a preferred form of democracy to representational democracy as it involves the citizens directly by deliberation. Ideology makes people blind to others' feelings and points of view. When we listen deeply to each other, we can understand and see we have more in common than we previously thought. This form of democracy was used in polis where people gathered in thousands and used deliberation to reach consensus and make laws. This form of democracy could not scale to millions of people thus representational democracy was created as a solution. Deliberative democracy fits with the nature of the modern leaderless movement of “Women Life Freedom”.
+% \subsection{Deliberative/Partipatory Digital Democracy}
+% Digital democracy social media platforms can open up governmental affairs with analyzing how large crowd thinks, find solutions, reach consensus and translate the consensus into legalese and make it law.
+
+
+\subsection{Open Governace} 
+The open government was proposed by an international organization called the OGP (Open Government Partnership). 
+Open governance is adhering to open value and engaging with citizens to improve services, manage public resources, drive innovation and build safer communities. With the principle of transparency and open government, we will achieve prosperity, well-being and a society in line with human dignity in our own country and in an increasingly connected world.
+The four elements of an open government are:
+\subsubsection{Transparency}
+Politics is everyone's business, and the policy process should allow the public to have a clear understanding of "what's going on." Friends in the public sector may be worried whether there will be any problems if we let the outside world see the communications before it's finished. In fact, the earlier the information is provided, the easier it is for the public to understand what the public sector is preparing for, so that the public sector can save the effort and time of repeated communication and further reduce the communication burden. 
+\subsubsection{Participation}
+In the process of policy formation, the public is given the opportunity to participate in discussions, express opinions, and even further influence the content of policy on topics of interest. As a result, while the public sector needs to spend more time building consensus, when the policy takes shape, it is less likely to be opposed by the public or totally objected.  
+\subsubsection{Accountability}
+When the public has doubts about the process of policy formation, we can look back to see who does and what are the reasons   
+\subsubsection{Inclusion}
+Public issues are broadly oriented. In the course of discussion of an issue, if the public sector is able to allow the various stakeholders who are directly affected by policy to fully voice their views and able to listen to their dialogues, it can collect as many views as possible so as to reduce the likelihood of policy errors. 
+
+
+% \subsection{Digital Democracy}
+% Digital democracy refers to the use of digital technology to enhance democratic processes and increase citizen engagement in decision-making. This can include various forms of digital platforms, such as social media, online forums, and digital democracy tools like pol.is. These platforms provide spaces for citizens to engage in rational discussions, collaborate on policy proposals, and provide feedback on government decision-making.
+% Digital democracy can also involve the use of technology to analyze public opinion and provide insights into citizens' views on critical issues. Artificial intelligence and big data analytics can be used to process large amounts of data and identify trends in public opinion, which can inform policymaking and enhance the democratic process.
+
+% Digital democracy has the potential to promote more inclusive, participatory, and responsive democratic processes by providing citizens with greater access to information and opportunities to engage in decision-making. However, it is important to ensure that these digital platforms are used transparently, ethically, and with respect for individual privacy to maintain democratic values and principles.
+% It is important, however, to ensure that technology is used ethically, transparently, and with respect for individual privacy. By embracing innovative digital democracy platforms and using technology responsibly, we can work towards building a more inclusive, participatory, and responsive democracy that reflects the needs and interests of all citizens.
+
+
+\subsection{Digital Democracy}
+
+Digital democracy refers to the application of digital technologies and the internet to enhance political participation, transparency, and accountability in democratic processes \cite{ coleman2004democracy}. It encompasses a range of tools and practices, such as electronic voting, e-petitions, and digital platforms for public consultation and deliberation \cite{davis2005online}. By leveraging digital technologies, digital democracy aims to make political processes more accessible, responsive, and efficient, thereby fostering a more inclusive and empowered citizenry \cite{dahlberg2001extending}.
+
+Digital democracy can contribute to the deliberative democratic framework by providing new opportunities for citizens to access information, voice their opinions, and engage in discussions with others. Digital platforms can help overcome geographical barriers and increase the diversity of voices heard in political debates, promoting greater understanding of diverse perspectives \cite{fishkin2009virtual}. However, digital democracy also presents challenges, such as the risk of misinformation, echo chambers, and online harassment, which can undermine the quality of deliberation.
+
+When examining digital democracy in the context of deliberative democracy, researchers should explore the following aspects:
+
+\begin{enumerate}
+\item How can digital platforms be designed to encourage informed and respectful deliberation among citizens? 
+\item What are the effects of digital tools on the quality of public debate and decision-making processes? 
+\item How can digital technologies help bridge social and political divides and promote greater understanding of diverse perspectives?
+\item What are the potential drawbacks of digital democracy, and how can they be mitigated to preserve the integrity of deliberative processes?
+\end{enumerate}
+
+By addressing these questions, academic research on digital democracy can contribute to the development of digital tools and practices that better support deliberative democratic processes and foster more informed and inclusive political decision-making.
+
+
+\subsection{Civic Technology of Democracy}
+
+As articulated by Dr. Tsai Ing-Wen, the former President of Taiwan, the goal is to "build a unified democracy, not hijacked by ideologies; an efficient democracy that responds to the demands of the environment; and a pragmatic democracy that will let people take care of each other's feelings" 
+
+Civic technology, also known as civic tech, refers to the employment of technology to enhance the relationship between citizens and their governments, facilitate public participation, and promote democratic processes \cite{hollands2015civic}. It encompasses the development of digital platforms, tools, and applications that empower citizens to voice their opinions, engage in decision-making, and hold governments accountable \cite{susha2015civic}. Examples of civic technology include online platforms for policy deliberation, participatory budgeting, and crowdsourcing solutions to local problems \cite{schrock2016civic}.
+
+Civic technology constitutes a critical component of digital democracy, as it can help bridge the gap between citizens and their governments, fostering greater transparency, responsiveness, and collaboration in addressing societal challenges \cite{townsend2013smart}. By leveraging civic technology, democratic processes can become more inclusive and effective, leading to improved public policies and services that reflect the needs and values of all citizens \cite{hollands2015civic}.
+
+A case in point is the 1922 Citizen Hotline in Taiwan, which enables citizens to voice their opinions and concerns, provide feedback on government decision-making, and report issues related to public services. During the COVID-19 pandemic, a child called the hotline to complain about receiving a pink mask and expressed embarrassment at having to wear it due to gender stereotypes. In response, hospitals and government officials announced that they would begin using pink masks, challenging gender stereotypes and promoting social innovation.
+
+
+
+% \subsection{Civic Technology of Democracy}
+
+% Civic technology refers to the use of technology to improve public services and promote greater citizen engagement in the democratic process. The use of digital platforms like social media, online forums, and digital democracy tools like pol.is are examples of civic technology that promote more inclusive and responsive democratic processes.
+
+% As Dr. Tsai Ing-Wen, the former President of Taiwan, said: "We need to build a unified democracy, not hijacked by ideologies; an efficient democracy that responds to the demands of the environment; and a pragmatic democracy that will let people take care of each other's feelings."
+
+% The 1922 Citizen Hotline in Taiwan is an example of how civic technology can enable citizens to voice their opinions and concerns, providing feedback on government decision-making and reporting issues related to public services. During the COVID-19 pandemic, a child called the hotline to complain about receiving a pink mask and expressed embarrassment at having to wear it due to gender stereotypes. In response, hospitals and government officials announced that they would begin using pink masks, challenging gender stereotypes and promoting social innovation.
+
+% Civic technology can promote greater citizen engagement, participation, and innovation in the democratic process, ultimately leading to more inclusive and responsive public services that better reflect the needs and values of all citizens.
+
+% Democracy is a social civic technology. The Taiwanese have shown us that we can use modern technology to make deliberative and participatory democracy possible for the masses, and open governmental affairs to the public with the internet. 
+% In the words of Dr. Tsai Ing-Wen, the former President of Taiwan, "We need to build a unified democracy, not hijacked by ideologies; an efficient democracy that responds to the demands of the environment; and a pragmatic democracy that will let people take care of each other's feelings." With this in mind, technology has emerged as an increasingly vital tool in modern democracy, with the potential to improve democratic processes and promote greater civic engagement.
+
+% Digital democracy platforms like pol.is provide an online space for citizens to engage in rational discussions and collaboration, promoting consensus-building and synthesis of solutions. Other innovative digital democracy platforms utilize artificial intelligence to analyze large amounts of data and provide insights into public opinion, or allow citizens to directly propose and vote on policies.
+
+% It is important, however, to ensure that technology is used ethically, transparently, and with respect for individual privacy. By embracing innovative digital democracy platforms and using technology responsibly, we can work towards building a more inclusive, participatory, and responsive democracy that reflects the needs and interests of all citizens.
+
+
+\subsection{Pol.is}
+A digital democracy widely used tool is pol.is. Pol.is is a social media platform equivalent to a town hall. In contrast, other social media platforms could be viewed as nightclubs and bars where people shout, fight, scream and the extreme ends of society are highlighted. Pol.is is a platform where people can participate in deliberation and rational discussions, synthesize solutions and reach consensus.
+With social innovation and deliberative digital democracy platforms, even with controversial and polarized subjects people can reach consensus.
+
+\subsection{vTaiwan}
+Digital democracy in Taiwan was started in 2014. This initiative is called vTaiwan and the “v” stands for “vision”, “voice”, “vote” and “virtual”. The participatory and deliberative democracy process in Taiwan has four stages and it is based on the focus conversation method. In the first stage, issues are identified, and then people’s facts, objectives, and experiences about the issues are collected. In the second stage, people's feelings about objectives and statements are collected. In the third stage, after people converge on sets of feelings that resonate with everyone, ideas on how to address them are collected. In the fourth state, the idea that is consensus is translated into legalese and signed into law. At each stage transition to the next one is done when a rough consensus is formed.
+
+
+\subsection{Public Digital Innovation Space}
+PDIS, or Public Digital Innovation Space, is a public innovation lab that has emerged as a leading force in promoting digital democracy and social innovation in Taiwan. PDIS seeks to foster collaboration and co-creation among citizens, government agencies, and civic groups to develop innovative solutions to public problems.
+In line with a human-centered design approach, PDIS places citizens' needs and experiences at the forefront of its innovation efforts. Its various initiatives, such as the Social Innovation Action Plan and the Digital Social Innovation Hackathon, are aimed at empowering citizens to participate in decision-making processes and develop innovative solutions that meet the needs of their communities.
+
+% PDIS has also created digital democracy tools like vTaiwan and Join, which provide citizens with platforms for collaborative decision-making and policy development. These tools use deliberative democracy techniques and digital technology to promote consensus-building and participation in the democratic process.
+% Overall, PDIS represents an innovative approach to public problem-solving, leveraging the power of digital technology and citizen engagement to create more inclusive, participatory, and responsive democratic processes.
+
+
+\subsection{Safeguarding Technology Integration in a Modern World}
+
+As technology advances at an exponential rate, it is crucial to strategically integrate it into our lives without allowing it to dominate our existence. One effective approach to achieve this balance is by implementing a systematic trial and error process, as demonstrated by Taiwan's Smart City initiative. This innovative sandbox system allows for the testing and evaluation of new ideas and technologies, such as robotics, whose implications are yet to be fully understood.
+
+By temporarily relaxing regulations and monitoring the impact of these innovations over a one-year trial period, Taiwan gains valuable insights into how new technologies can be safely integrated with their legal framework and the lives of their citizens. This method fosters a controlled environment for innovation and technological advancement, ensuring a secure path towards the future for our species.
+
+Iran can take inspiration from Taiwan's Smart City model to develop multiple smart cities tailored to the unique needs and characteristics of its various regions or ethnicities. This approach not only encourages investment and capital growth but also offers opportunities for cutting-edge research in areas that would otherwise remain unexplored. By adopting a similar system, Iran can ensure safe technological integration while promoting innovation and progress in the modern world.
+% \section{Research Questions}
+
+% \subsection{How could we minimize the uncertainties about the future?}
+
+% With the help of open source open science, we can create plan for the future of Iran.
+% Open science case studies of the world in all aspects of governance can be conducted to create solid plans for the future of Iran before the Islamic Republic is overthrown.
+% This blueprint itself is an example of open source open science, where the people of Iran can contribute to the plan.
+% With the help of solid plans for the future, we can minimize the uncertainties about the future.
+
+% \subsection{Could we create a leaderless opposition?}
+% Educating the public and solid plans for the future,
+% open governance, transparency and digital democracy can reduce
+% uncertainties, open up people’s imagination, and give birth to a
+% leaderless opposition.
+
+% \subsection{How could we facilitate giving birth to a coalition?}
+
+\section{Methodology}
+
+The methodology employed in this research is a collaborative, data-driven approach that embraces open-source and open-science principles.
+
+\subsection{Open Source Open Science Methodology}
+
+This study adopts an open source open science methodology that combines both principles to promote transparency, reproducibility, and collaboration in research. The methodology emphasizes sharing of privacy aware data, tools, and results through open-source platforms such as Git, thereby enhancing collaboration, transparency and reproduciliy of this work.
+To ensure the rigor and validity of the research, the open source open science methodology also involves open peer review and open collaboration and platforms for analyzing public opinion such as open question answers. Experts in the field will be invited to review and provide feedback on the work, while collaboration with other researchers and stakeholders will be encouraged. This will enable a more comprehensive and diverse evaluation of the research, and contribute to enhancing its validity and generalizability.
+
+\subsection{Dissmination of Knowledge}
+The dissemination of research findings is also a critical aspect of the open source open science methodology. This will include publishing articles in open access journals, making presentations at conferences, and sharing results and data through social media and other online platforms. The aim is to make the research findings widely accessible and understandable, even to those without a technical background.
+To achieve this, the methodology includes the dissemination of knowledge at various levels of complexity, ranging from academic publications to online articles and videos with a more accessible language. This dissemination potencially can enable a wider audience regarless of their educational background, including children, to understand the significance and implications of the research.
+
+\subsection{Research Plan}
+This research plan is grounded in empirical data. The first step involves gathering data on research questions to determine their relevance to people in Iran. Public opinion will be analyzed, and the plan refined accordingly. The next step is to release open resumes of the applications of this assembly and analyze the data to further refine the plan.
+By using a collaborative, data-driven approach, this research aims to produce results that are relevant, transparent, and replicable.
+
+
+\section{Road Map}
+
+A scientific methodology for digital democracy can play a vital role in defining the road map for the future of Iran. The use of digital democracy platforms, such as pol.is, can help address polarizing issues like the Iranian flag by promoting rational discussions and consensus-building. By working through the details of such issues, citizens can then build consensus on larger issues, rather than being restricted to binary options of Constitutionalism or Republicanism.
+Digital democracy can also provide a means for citizens to engage in the decision-making process and collaborate on policy proposals. Innovative digital democracy platforms that use artificial intelligence to analyze public opinion can offer insights into citizens' views on critical issues, and can inform policymaking and enhance the democratic process.
+
+Digital democracy can promote greater citizen engagement and participation, ultimately leading to a more inclusive and responsive democratic process that reflects the needs and values of all citizens. This can empower citizens to play an active role in shaping the future of Iran and in creating innovative solutions to public problems.
+As Iran continues to navigate its future, embracing digital democracy can provide a new path for progress and consensus-building, leading to a more unified, efficient, and pragmatic democracy that benefits all members of society.
+
+However, it is important to note that further research is required to adapt the current state-of-the-art digital democracy platforms to match the culture of Iranians, localize the platforms, and scale them to the population of Iran. For example, the current digital democracy platform in Taiwan has a population of around 20 million, whereas Iran has a population of approximately 84 million. Therefore, it is necessary to explore the feasibility of implementing such platforms in a country with a larger population and different cultural and political contexts. By conducting research and tailoring digital democracy platforms to meet the needs of Iranian citizens, the potential benefits of digital democracy can be fully realized.
+\section{Research Questions for the Open Science Coalition and Representative Assembly}
+
+To effectively address the challenge of creating a representative coalition and assembly, we have identified the following key research questions to guide our investigation and analysis:
+
+\subsection{How many members should the coalition and assembly have?}
+The coalition and assembly aim to represent the diverse population of Iran, including various ethnicities such as Kurds, Balouch, Azari, and others. A small number of members, such as seven, would not adequately represent the people of Iran. To ensure comprehensive representation and inclusivity, the coalition and assembly could consist of hundreds of members. This larger size would enable a broader range of perspectives and a more accurate representation of Iran's diverse population, fostering equitable decision-making and policy development.
+
+\subsection{What are the objectives of the assembly?}
+The assembly should represent the people of Iran to the world and plan for the country's future. Open science case studies can be conducted in all aspects of governance to create solid plans for Iran's future once the Islamic Republic is overthrown. A well-prepared plan for the future would clarify uncertainties and support the people of Iran in their efforts to bring about governmental change and a better path toward the future.
+
+\subsection{What are the core principles of the assembly?}
+In this section, we propose three principles:
+
+\subsubsection{Openness and Transparency}
+Openness and transparency are crucial for ensuring the assembly's credibility and trustworthiness. All assembly operations should be digitally transparent. Members communicate via the internet, making data publicly available, and all communication, whether in-person or online, is live-streamed. The assembly's finances are digitally transparent, and all software is open-source.
+
+\subsubsection{Deliberative Democracy}
+Deliberative democracy emphasizes the importance of discussion and debate among members, allowing for a leaderless structure where the assembly operates as a heterarchy. This approach fosters collective decision-making and promotes a more inclusive, democratic environment.
+
+\subsubsection{Development of Open Scientific Plans for Iran's Future}
+The assembly will focus on creating open-source, open-science, peer-reviewed plans that result from rigorous research. Open-source science entails presenting the progress of the work and all its digital artifacts to the public, enabling collaboration with anyone worldwide, including individuals inside Iran. This approach allows people in Iran to submit their plans, raise questions and concerns about existing plans, and receive answers from researchers.
+
+\subsection{Who are the members of the assembly?}
+The assembly should comprise representatives from all ethnicities and minorities in Iran, as well as the best candidates for developing the plans. Consequently, the primary members of the assembly may include activists, scientists, engineers, and artists. Expert groups can be established by these members to research various governmental aspects, such as banking and financial infrastructure, utilities infrastructure (water, electricity, gas), communications infrastructure (television, internet, radio), policing, national military, public health, rule of law, environmental sustainability, transitional government, transitional justice, democratic elections, education, and economy and commerce. Each field should have a dedicated team of at least 5 to 10 experts and researchers to propose and develop plans.
+
+\subsection{What is the selection process for the members of the assembly?}
+The selection process must be transparent from the outset. Candidates who accept the assembly's core principles can apply for council membership by submitting a resume, proposal, livestream interviews with Iranians, and participating in open Q&A sessions. All application data is made publicly available. Organizations can only have representatives considered if they adhere to the assembly's transparency and openness protocols.
+
+The candidate selection process and interviews are live-streamed, with members chosen based on their representativeness and meritocracy in conducting global case studies. Multiple NGOs can further analyze the data and submit online reports. Additionally, the Iranian diaspora can be officially asked to vote, using a secure protocol to forward the votes of relatives and friends inside Iran. Social media analysis can provide further insights into the opinions of people in Iran.
+
+The data can be analyzed through an open science methodology, which embraces digital democracy principles. By employing statistical analysis of all the collected data and developing a valid hypothesis with a high confidence interval, the members can attain legitimacy in their representativeness. This open science approach fosters greater transparency, collaboration, and inclusiveness in the selection process.
+\subsection{What is the selection process for plans?}
+Any open science peer-reviewed research proposal can be submitted by individuals for consideration in shaping the future of Iran. In cases where multiple plans are proposed for a specific subject, a deliberative process is used to identify the most suitable plan for Iran, with discussions continuing until a rough consensus is reached.
+
+\subsection{How can people inside Iran participate in the assembly?}
+Digital tools can be employed to enable secure remote participation. Additionally, the analysis of social media data can help determine the preferences and opinions of the Iranian people. Independent third-party organizations can conduct scientific analyses to ensure transparency and openness in the process.
+
+\subsection{What do the Iranian people want?}
+To answer this question, it is essential to examine the past and investigate the demands of the Iranian people. By establishing a secure internet channel and a social democracy platform, data can be collected and analyzed to better understand the desires and aspirations of the Iranian population.
+\subsection{What is the decision-making process?}
+
+
+\subsection{What are the operational strategies?}
+
+\subsection{Can we make an assembly of thousand with participatory deliberate digital democracy platforms?}
+
+
+
+
+\section{Future work}
+Future work includes answering the open research questions, and writing a scientific peer-reviewd blueprint.
+
+\clearpage
+\newpage
+
+
+\printbibliography
+
+
+% \input{7-appendix}
+\end{document}
