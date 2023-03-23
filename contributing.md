@@ -8,7 +8,7 @@ You can contribute to our project in several ways:
 
 
 * Introduce yourself, your skills, and discuss how you can contribute
-* Ask and answer questions, and join discussions on our open science Yerbamate discussion board
+* Ask and answer questions, and join discussions on our discussion board
 * Report issues or suggest enhancements on the issue tracker
 * Submit pull requests with bug fixes or feature improvements
 * Review pull requests from others
@@ -26,7 +26,7 @@ We appreciate contributions of all sizes and types, and maintainers are co-autho
 
 ## Pull Requests
 
-When submitting pull requests, ensure your changes align with the overall scope and purpose of the Yerbamaté paper. Follow these guidelines:
+When submitting pull requests, ensure your changes align with the overall scope and purpose of the paper. Follow these guidelines:
 
 1.    Fork the repository and create a new branch for your changes
 2.    Commit your changes with clear and descriptive commit messages

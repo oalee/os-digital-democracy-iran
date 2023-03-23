@@ -15,7 +15,7 @@ You can download the
 latest PDF version from [here](https://github.com/oalee/os-digital-democracy-iran/blob/main/os-research.pdf)
 
 
-## Get Involved
+## Contribution
 
 
 <!-- . Moreovers Contributions may include answering questions, engaging in discussions, and sharing ideas related to digital democracy for Iran. To contribute, -->
