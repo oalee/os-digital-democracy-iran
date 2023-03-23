@@ -1,4 +1,4 @@
-## Open Science Research - Enhancing Democracy for the people of Iran through Digital Innovation
+## Open Science Research - Enhancing Democracy For The People of Iran Through Social Digital Innovation
 
 This repository hosts the research materials for the Open Science Research project, focusing on enhancing digital democracy in Iran. The project aims to study and propose socially-driven digital innovations that can improve democratic processes for Iranian citizens, with consideration for both immediate application and future deployment.
 
@@ -9,15 +9,19 @@ This repository hosts the research materials for the Open Science Research proje
 - [Code of Conduct](#code-of-conduct)
 - [Contact Us](#contact-us)
 
-## Report
+## Latest Research
 
-You can download the latest PDF version from [here](https://github.com/oalee/os-digital-democracy-iran/blob/main/os-research.pdf)
+You can download the 
+latest PDF version from [here](https://github.com/oalee/os-digital-democracy-iran/blob/main/os-research.pdf)
 
-## Contribution
 
-We welcome contributions to the scientific paper describing the Yerbamate framework. Contributions may include answering questions, engaging in discussions, and sharing ideas related to the framework. To contribute, please open a new issue or comment on an existing issue.
+## Get Involved
 
-We hope to create a new altmetric for your contributions to this work, and your contribution will be acknowledged in the paper. Please see the [Contribution Guide](https://github.com/oalee/os-digital-democracy-iran/blob/main/contributing.md) for more information on how to contribute.
+
+<!-- . Moreovers Contributions may include answering questions, engaging in discussions, and sharing ideas related to digital democracy for Iran. To contribute, -->
+
+Join our collaborative effort in developing code, conducting research, and discussing digital democracy and innovations for Iran. Learn more in our [Contribution Guide](https://github.com/oalee/os-digital-democracy-iran/blob/main/contributing.md).
+
 
 ## Code of Conduct
 
