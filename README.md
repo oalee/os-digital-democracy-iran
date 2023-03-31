@@ -17,11 +17,11 @@ latest PDF version from [here](https://github.com/oalee/os-digital-democracy-ira
 
 ## Current Status
 
-The project is currently in the research phase. We are currently looking for collaborators to help us with the research and development of the project. If you are interested in contributing, please see the [Contribution](#contribution) section below and introduce yourself in the discussions.
+The project is currently in the research phase. We are currently looking for collaborators to help us with the research and development of the project. If you are interested the latest updates, checkout out our [discussions](https://github.com/oalee/os-digital-democracy-iran/discussions/1).
 
-### Upcoming Research
+### Latest Updates
 
-Current three approaches have been identified to advance digital democracy in Iran (though I haven't fully explained them in the paper yet):
+Current three approaches have been identified to present democracy for the people of Iran in digital platforms:
 
 * Open-sourcing democratic work, such as the Mahsa Charter, to enhance transparency and openly showcase revisions and collaboration processes.
 * ADFIran can systematically address public concerns by analyzing public opinion on social media platforms like Twitter, examining rational discussions (e.g., well-reasoned content from users like Kardo, DaiKatu, or GaldriedMahsa's critiques), and featuring FAQs and responses on their website. This can be further improved with a systematic question-answering and discussion platform.
